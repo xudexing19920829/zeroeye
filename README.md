@@ -1,3 +1,4 @@
+[![CI](https://github.com/lobster-trap/zeroeye/actions/workflows/ci.yml/badge.svg)](https://github.com/lobster-trap/zeroeye/actions/workflows/ci.yml)
 # Tent of Trials
 
 Trading and risk platform.
