@@ -1,0 +1,172 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lobster-trap/zeroeye/schemas/data-schema.json",
+  "title": "ZeroEye Data Schema",
+  "description": "JSON Schema for ZeroEye data structures",
+  "type": "object",
+  "properties": {
+    "build": {
+      "$ref": "#/definitions/BuildMetadata"
+    },
+    "diagnostic": {
+      "$ref": "#/definitions/DiagnosticReport"
+    },
+    "config": {
+      "$ref": "#/definitions/Config"
+    }
+  },
+  "definitions": {
+    "BuildMetadata": {
+      "type": "object",
+      "properties": {
+        "commit_id": {
+          "type": "string",
+          "description": "Git commit SHA"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Build timestamp"
+        },
+        "version": {
+          "type": "string",
+          "description": "Build version"
+        },
+        "platform": {
+          "type": "string",
+          "enum": ["linux", "darwin", "windows"],
+          "description": "Target platform"
+        },
+        "arch": {
+          "type": "string",
+          "enum": ["amd64", "arm64"],
+          "description": "Target architecture"
+        }
+      },
+      "required": ["commit_id", "timestamp", "platform", "arch"]
+    },
+    "DiagnosticReport": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique diagnostic report ID"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Report generation time"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["success", "failure", "warning"],
+          "description": "Diagnostic status"
+        },
+        "metrics": {
+          "$ref": "#/definitions/Metrics"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Error"
+          },
+          "description": "List of errors found"
+        }
+      },
+      "required": ["id", "timestamp", "status"]
+    },
+    "Metrics": {
+      "type": "object",
+      "properties": {
+        "build_duration_ms": {
+          "type": "number",
+          "description": "Build duration in milliseconds"
+        },
+        "test_duration_ms": {
+          "type": "number",
+          "description": "Test duration in milliseconds"
+        },
+        "code_coverage": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Code coverage percentage"
+        },
+        "lint_errors": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of lint errors"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Error code"
+        },
+        "message": {
+          "type": "string",
+          "description": "Error message"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["error", "warning", "info"],
+          "description": "Error severity"
+        },
+        "file": {
+          "type": "string",
+          "description": "File where error occurred"
+        },
+        "line": {
+          "type": "integer",
+          "description": "Line number of error"
+        }
+      },
+      "required": ["code", "message", "severity"]
+    },
+    "Config": {
+      "type": "object",
+      "properties": {
+        "environment": {
+          "type": "string",
+          "enum": ["development", "staging", "production"],
+          "description": "Deployment environment"
+        },
+        "features": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean"
+          },
+          "description": "Feature flags"
+        },
+        "logging": {
+          "$ref": "#/definitions/LoggingConfig"
+        }
+      },
+      "required": ["environment"]
+    },
+    "LoggingConfig": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "type": "string",
+          "enum": ["debug", "info", "warn", "error"],
+          "description": "Log level"
+        },
+        "format": {
+          "type": "string",
+          "enum": ["json", "text"],
+          "description": "Log format"
+        },
+        "output": {
+          "type": "string",
+          "enum": ["stdout", "file"],
+          "description": "Log output destination"
+        }
+      },
+      "required": ["level"]
+    }
+  }
+}
