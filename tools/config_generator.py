@@ -166,9 +166,11 @@ ENV_OVERRIDES: Dict[str, Dict[str, Any]] = {
     },
 }
 
+# FIX: Removed duplicate auth.jwt_secret entries
 SENSITIVE_KEYS = [
-    "database.password", "redis.password", "auth.jwt_secret",
-    "auth.jwt_secret", "auth.jwt_secret",
+    "database.password",
+    "redis.password",
+    "auth.jwt_secret",
 ]
 
 
